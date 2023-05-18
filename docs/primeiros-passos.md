@@ -4,11 +4,25 @@ hero: true
 outline: deep
 ---
 
-# Markdown Extension Examples
+<VPDocHero
+    class="VPDocHero"
+    name="Primeiros Passos"
+    text="Configurações e instalações"
+    image=""
+    :actions="[
+        {
+            theme: 'alt',
+            text:'Clone o repositório',
+            link:'https://github.com/leticiacb1/SIA/tree/main'
+        },
+    ]"
+/>
 
-This page demonstrates some of the built-in markdown extensions provided by VitePress.
+# Primeiros Passos
 
-## Syntax Highlighting
+Nesta página, serão escritas as configurações e instalações necessárias para a reprodução do projeto.
+
+## Configuração 
 
 VitePress provides Syntax Highlighting powered by [Shiki](https://github.com/shikijs/shiki), with additional features like line-highlighting:
 

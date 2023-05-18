@@ -25,7 +25,7 @@ export default defineConfig({
             text: 'Entendendo o Projeto',
             link: '/contextualizacao'
           }, {
-            text: 'SIA',
+            text: 'Primeiros Passos',
             link: '/primeiros-passos'
           }
         ]
