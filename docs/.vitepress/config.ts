@@ -14,8 +14,30 @@ export default defineConfig({
       { text: 'Home', link: '/' },
     ],
 
+    sidebar: [
+      {
+        text: 'Tópicos',
+        items: [
+          {
+            text: 'Home',
+            link: '/'
+          }, {
+            text: 'Entendendo o Projeto',
+            link: '/contextualizacao'
+          }, {
+            text: 'SIA',
+            link: '/primeiros-passos'
+          }
+        ]
+      }
+    ],
+
     socialLinks: [
       { icon: 'github', link: 'https://github.com/leticiacb1/SIA' }
-    ]
+    ],
+
+    outline: 'deep',
+    outlineTitle: 'Tópicos',
+
   }
 })
