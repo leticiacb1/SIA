@@ -3,23 +3,42 @@
 layout: home
 
 hero:
-  name: "SIA - Scalable infrastructure for applications"
-  text: "Tutorial de criação de uma infraestrutura escalonável para aplicações na AWS"
-  tagline: My great project tagline
+  name: "SIA"
+  text: "Scalable infrastructure for applications"
+  tagline : "Tutorial de criação de uma infraestrutura escalonável para aplicações na AWS"
+
+  image:
+    src: ./img/home_cloud.png
+    alt: VitePress
+
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Entendendo o projeto
+      link: /contextualizacao
     - theme: alt
-      text: API Examples
+      text: SIA
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  
+  - icon : 
+      src: ./img/terraform_icon.png
+    title : Terraform
+    details: O Terraform é uma ferramenta de software de infraestrutura como código de código aberto criada pela HashiCorp.
+    link: https://developer.hashicorp.com/terraform/docs
+    linkText: Docs
+  - icon : 
+      src: ./img/kubernetes_icon.png   
+    title: Kubernets
+    details: O Kubernetes é um software de código aberto que permite implantar e gerenciar aplicações conteinerizadas em grande escala.
+    link: https://kubernetes.io/docs/home/
+    linkText: Docs
+
+  - icon : 
+      src: ./img/aws_icon.png   
+    title: AWS
+    details: Plataforma de serviços de computação em nuvem, que formam uma plataforma de computação na nuvem oferecida pela Amazon.com.
+    link: https://docs.aws.amazon.com/
+    linkText: Docs
 ---
 
