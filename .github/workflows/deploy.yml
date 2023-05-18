@@ -1,4 +1,3 @@
-# Retirado de : https://vitepress.dev/guide/deploy
 name: Deploy
 on:
   workflow_dispatch: {}
@@ -16,13 +15,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: npm
-      - run: npm ci
+      - run: npm install --frozen-lockfile
       - name: Build
         run: npm run docs:build
       - uses: actions/configure-pages@v2
