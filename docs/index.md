@@ -17,7 +17,7 @@ hero:
       link: /contextualizacao
     - theme: alt
       text: SIA
-      link: /api-examples
+      link: /primeiros-passos
 
 features:
   
