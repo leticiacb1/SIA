@@ -9,8 +9,8 @@
 resource "aws_security_group" "aws-ubuntu-sg" {
   name        = "ubuntu-sg"
   description = "Allow incoming traffic to the Ubuntu EC2 Instance"
-  #vpc_id      = aws_vpc.vpc.id
-  
+  vpc_id      = aws_vpc.vpc.id
+
   # --- Permissões de ingresso : Permite conexões HTTP e SSH
   # HTTP
   ingress {
@@ -38,7 +38,7 @@ resource "aws_security_group" "aws-ubuntu-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  
+
   tags = {
     Name = "ec2_ssh_e_http"
   }

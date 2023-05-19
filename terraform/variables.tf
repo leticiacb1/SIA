@@ -9,8 +9,8 @@
 variable "AWS_REGION" {
   description = "Região utilizada pela AWS"
   type        = string
-  
-  default = "us-east-1"   # North Virginia
+
+  default = "us-east-1" # North Virginia
 }
 
 variable "AWS_ACCESS_KEY_ID" {
@@ -29,11 +29,17 @@ variable "AWS_SECRET_ACCESS_KEY" {
 # ----- Sistema operacional instalado nas instâncias
 variable "ami" {
   description = "AMI"
-  default = "ami-007855ac798b5175e" // Ubuntu - Região us-east-1
+  default     = "ami-007855ac798b5175e" // Ubuntu - Região us-east-1
 }
 
 # ----- "Tamanho" da instância
 variable "instance_type" {
   description = "EC2 instance type"
-  default = "t2.micro"
+  default     = "t2.micro"
+}
+
+# ---- VPC - Avaliable Zone 
+variable "aval_zone" {
+  description = "Avaliable Zone , VPC"
+  default     = "us-east-1a"
 }
