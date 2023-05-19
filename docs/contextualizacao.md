@@ -15,14 +15,14 @@ Objetiva-se portanto o escalonamento automático de instâncias , a depender da 
 
 ### Diagrama Arquitetura
 
-<img src="/img/diagrama.jpeg" alt="Diagrama da Arquitetura" style="height: 50rem; width:40rem;"/>
+<img src="/img/diagrama.jpeg" alt="Diagrama da Arquitetura" caption="Imagem" style="height: 50rem; width:40rem;"/>
 
 ### Conceitos básicos - Serviços AWS
 <br>
 
 ####  Virtual Private Cloud (VPC) 
 
-É um serviço da AWS que permite iniciar recursos da AWS em uma rede virtual isolada logicamente definida por você. Você tem controle total sobre seu ambiente de redes virtuais, incluindo a seleção do seu próprio intervalo de endereços IP, a criação de sub-redes e a configuração de tabelas de rotas e gateways de rede. *[1]*
+É um serviço da AWS que permite iniciar recursos da AWS em uma rede virtual isolada logicamente definida por você. Você tem controle total sobre seu ambiente de redes virtuais, incluindo a seleção do seu próprio intervalo de endereços IP, a criação de sub-redes e a configuração de tabelas de rotas e gateways de rede. *[^1]*
 <br>
 
 #### Elastic Load Balance (ELB) 
@@ -39,7 +39,7 @@ O Amazon EC2 permite aumentar ou reduzir a escala para lidar com alterações no
 
 ## Refrências
 
-[1]: Recursos do Amazon Virtual Private Cloud. Disponível [aqui](https://aws.amazon.com/pt/vpc/features/).
+[^1]: Recursos do Amazon Virtual Private Cloud. Disponível [aqui](https://aws.amazon.com/pt/vpc/features/).
 <br>
 
 [2]: O que é Elastic Load Balance?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/elasticloadbalancing/latest/userguide/what-is-load-balancing.html).
