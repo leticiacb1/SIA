@@ -38,8 +38,14 @@ variable "AWS_SECRET_ACCESS_KEY" {
 #   default     = "t2.micro"
 # }
 
-# # ---- VPC - Avaliable Zone 
-# variable "aval_zone" {
-#   description = "Avaliable Zone , VPC"
-#   default     = "us-east-1a"
-# }
+# ---- VPC - Avaliable Zone 
+
+variable "aval_zone_1" {
+  description = "Avaliable Zone 1, VPC"
+  default     = "us-east-1a"
+}
+
+variable "aval_zone_2" {
+  description = "Avaliable Zone 2, VPC"
+  default     = "us-east-1b"
+}
