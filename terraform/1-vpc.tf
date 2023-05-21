@@ -28,9 +28,3 @@ output "vpc_id" {
   value       = aws_vpc.main-vpc.id
   description = "VPC id"
 }
-
-# -------------------------------------------
-# Docs : https://www.youtube.com/watch?v=9ZMyfdbSwCg&list=PL-cC6RUnFTfMlh1Cl6Mf8sbGApomjevS8&index=12
-#        https://www.youtube.com/watch?v=BKm5HDqZkNo&list=PL-cC6RUnFTfMlh1Cl6Mf8sbGApomjevS8&index=13
-# -------------------------------------------
-# ---- Internet gateway
