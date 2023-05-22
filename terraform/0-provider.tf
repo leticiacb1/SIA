@@ -31,3 +31,20 @@ provider "aws" {
     }
   }
 }
+
+# -------------------------------------------
+# Docs : https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs
+# -------------------------------------------
+
+provider "kubernetes" {
+    host = aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64encode(aws_eks_cluster.eks.certificate_authority[0].data)
+
+    # Para tal comando funcionar, é necessário que AWScli esteja localmente instalada
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.eks.name]
+      command     = "aws"
+    }
+
+}

@@ -60,6 +60,11 @@ resource "aws_eks_cluster" "eks" {
   ]
 }
 
+# OUTPUTS : 
+output "cluster_id" {
+    value = aws_eks_cluster.eks.cluster_id
+}
+
 output "endpoint" {
   value = aws_eks_cluster.eks.endpoint
 }

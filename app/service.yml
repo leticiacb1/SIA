@@ -1,0 +1,31 @@
+# --- Private Load Balance : Tax between subnets configured with tags
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-nginx-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0  # To create private load balance , default = public
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer
+# --- Public Load Balance : Expose service - Acess by internet
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-nginx-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer

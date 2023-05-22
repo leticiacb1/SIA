@@ -54,7 +54,7 @@ resource "aws_eks_node_group" "nodes-general-group" {
 
   # Identificar as EC2 Subnets para associar ao EKS-Node-Group
   # Essas subnets devem ter tags obrigatórias
-  # Public-subnets serão epnas utilizadas pelo load-balancer,
+  # Public-subnets serão apenas utilizadas pelo load-balancer,
   subnet_ids = [
     aws_subnet.subnet-private-1.id,
     aws_subnet.subnet-private-2.id,
