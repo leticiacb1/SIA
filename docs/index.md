@@ -8,7 +8,7 @@ hero:
   tagline : "Tutorial de criação de uma infraestrutura escalonável para aplicações na AWS"
 
   image:
-    src: /img/home_cloud.png
+    src: /img/background_home.gif
     alt: VitePress
 
   actions:

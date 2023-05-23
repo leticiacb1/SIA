@@ -15,7 +15,7 @@ Objetiva-se portanto o escalonamento automático de instâncias , a depender da 
 
 ### Diagrama Arquitetura
 
-<img src="/img/diagrama.jpeg" alt="Diagrama da Arquitetura" caption="Imagem" style="height: 50rem; width:40rem;"/>
+<img src="/img/diagrama.png" alt="Diagrama da Arquitetura" caption="Imagem"/>
 
 ### Conceitos básicos - Serviços AWS
 <br>
@@ -37,6 +37,10 @@ O Amazon Elastic Compute Cloud (Amazon EC2) oferece uma capacidade de computaç�
 
 O Amazon EC2 permite aumentar ou reduzir a escala para lidar com alterações nos requisitos ou com picos em popularidade, utilizando  Auto Scaling. Isso permite a manutenção de disponibilidade do aplicativo e permite adicionar ou remover automaticamente instâncias do EC2 usando políticas de escalabilidade, essas políticas permitem adicionar ou remover a capacidade da instância do EC2 para atender a padrões de demanda estabelecidos ou em tempo real. *[3]*
 
+#### Amazon Elastic Kubernetes Service (EKS)
+
+O Amazon Elastic Kubernetes Service (Amazon EKS) é um serviço gerenciado que você pode usar para executar o Kubernetes na AWS sem precisar instalar, operar e manter seu próprio plano de controle ou nós do Kubernetes.*[4]*
+
 ## Refrências
 
 [^1]: Recursos do Amazon Virtual Private Cloud. Disponível [aqui](https://aws.amazon.com/pt/vpc/features/).
@@ -45,4 +49,6 @@ O Amazon EC2 permite aumentar ou reduzir a escala para lidar com alterações no
 [2]: O que é Elastic Load Balance?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/elasticloadbalancing/latest/userguide/what-is-load-balancing.html).
 <br>
 
-[3]: O que é o Amazon EC2? . Disponível [aqui](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html)
+[3]: O que é o Amazon EC2?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html)
+
+[4]: O que é Amazon EKS?. Disponível [aqui](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
