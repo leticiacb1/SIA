@@ -6,9 +6,9 @@ outline: deep
 
 <VPDocHero
     class="VPDocHero VPDocHero-minimum"
-    name="Primeiros Passos"
-    text="Configurações e instalações"
-    image="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Flying%20Saucer.png"
+    name="O Projeto"
+    text="Configurando uma infraestrutura escalável para hospedagem de aplicações"
+    image="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png"
     :actions="[
         {
             theme: 'alt',
