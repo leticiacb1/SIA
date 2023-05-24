@@ -43,12 +43,12 @@ O Amazon Elastic Kubernetes Service (Amazon EKS) é um serviço gerenciado que v
 
 ## Refrências
 
-[^1]: Recursos do Amazon Virtual Private Cloud. Disponível [aqui](https://aws.amazon.com/pt/vpc/features/).
+*[1]*: Recursos do Amazon Virtual Private Cloud. Disponível [aqui](https://aws.amazon.com/pt/vpc/features/).
 <br>
 
-[2]: O que é Elastic Load Balance?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/elasticloadbalancing/latest/userguide/what-is-load-balancing.html).
+*[2]*: O que é Elastic Load Balance?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/elasticloadbalancing/latest/userguide/what-is-load-balancing.html).
 <br>
 
-[3]: O que é o Amazon EC2?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html)
+*[3]*: O que é o Amazon EC2?. Disponível [aqui](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html)
 
-[4]: O que é Amazon EKS?. Disponível [aqui](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+*[4]*: O que é Amazon EKS?. Disponível [aqui](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)

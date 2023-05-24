@@ -27,6 +27,12 @@ export default defineConfig({
           }, {
             text: 'Primeiros Passos',
             link: '/primeiros-passos'
+          }, {
+            text: 'Dashboard AWS',
+            link: '/dashboard'
+          }, {
+            text: 'Projeto',
+            link: '/projeto'
           }
         ]
       }
