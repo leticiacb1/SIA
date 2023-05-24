@@ -96,7 +96,7 @@ Siga o passo a passo a seguir para adquirir suas credenciais de acesso.
 
 
 <div align="center">
-<img src = "dashboard/credenciais_acesso_1.png" />
+<img src = "/img/credenciais_acesso_1.png" />
 <caption>Fluxo para criação da chave de acesso - Parte 1</caption>
 </div>
 
@@ -107,14 +107,14 @@ Siga o passo a passo a seguir para adquirir suas credenciais de acesso.
 <br>
 
 <div align="center">
-<img src = "dashboard/credenciais_acesso_2.png" />
+<img src = "/img/credenciais_acesso_2.png" />
 <caption>Fluxo para criação da chave de acesso - Parte 2</caption>
 </div>
 
 <br>
 
 <div align="center">
-<img src = "dashboard/credenciais_acesso_3.png" />
+<img src = "/img/credenciais_acesso_3.png" />
 <caption>Fluxo para criação da chave de acesso - Parte 3</caption>
 </div>
 
