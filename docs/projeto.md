@@ -46,7 +46,7 @@ AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 
 * **Kubectl** instalado e funcionando. 
 
-## Comandos básicos Terraform
+## Conceitos básicos Terraform
 
 * **terraform init**
 
@@ -353,8 +353,225 @@ Veja novamente o tópico [Dashboard AWS- Criando uma VPC](./dashboard) e procure
 
 ### Acessando a internet  | Internet gatway 
 
+O **Internet gatway** é um componente da VPC  redundante e altamente disponível que permite a comunicação entre a VPC e a Internet. *[2]* 
+
+*internet-gateway.tf*
+```bash
+resource "aws_internet_gateway" "main" {
+
+  vpc_id = aws_vpc.main-vpc.id
+
+  tags = {
+    Name = "main-gateway"
+  }
+}
+```
+
+O único argumento obrigatório desse recurso é o ID da VPC. Esse argumento indica "em qual VPC esse componente dará acesso a internet".
+
+### Subredes
+
+Como é possível ver no diagrama do projeto indicado anteriomente, queremos que nossa VPC possua um total de **4 subrede** , sendo 2 públicas e 2 privadas e **2 Zonas de Disponibilidade**.
+
+O conceito de subrede publica e privada ficará mais claramente definida adiante.
+
+*subnets.tf*
+```bash{19,22,39,40}
+# --- Create Public Subnets ---
+
+resource "aws_subnet" "subnet-public-1" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.0.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_1
+
+  # Required for EKS 
+  # Qualquer intancia lançada nessa rede pública, recebe um IP de forma automática
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Public-${var.aval_zone_1}"
+
+    # ------ Required for EKS ------
+    # Permite que EKS descubra a subrede e a use 
+    "kubernetes.io/cluster/eks" = "shared" 
+    
+    # Necessário para public LoadBalance - Permite que o EKS descubra a subrede e posicione o lb externo para o fluxo de serviços.
+    "kubernetes.io/role/elb"    = 1        
+  }
+
+}
+
+
+resource "aws_subnet" "subnet-public-2" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.64.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_2
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name                        = "Public-${var.aval_zone_2}"
+    "kubernetes.io/cluster/eks" = "shared"
+    "kubernetes.io/role/elb"    = 1
+  }
+
+  # --- Código omitido ---   
+}
+```
+
+Vamos descrever um pouco alguns dos atributos utilizados no código acima:
+
+* **vpc_id** : identificação da VPC na qual as subnets serão criadas.
+
+* **availability_zone** : as zonas de disponibilidade são vários locais isolados em cada região. As zonas locais fornecem a capacidade de colocar recursos, como computação e armazenamento, em vários locais mais próximos de seus usuários finais. *[3]*
+
+* **map_public_ip_on_launch** : quando `True` as instâncias executadas na sub-rede devem receber um endereço IP público.
+
+Os tópicos destacados no código serão melhor entendidos adiante, mas de forma geral podemos definir que :
+
+*  `"kubernetes.io/cluster/eks" = "shared"` : permitira que que o EKS descubra a subrede e a use.
+
+*  `"kubernetes.io/role/elb" = 1` : Permite que o EKS descubra a subrede e posicioneum load balancer externo, necessário para o fluxo de serviços. 
+
+Podemos completar o código adicionando também as subredes privadas.
+
+*subnets.tf*
+```bash{60,77}
+# --- Create Public Subnets ---
+
+resource "aws_subnet" "subnet-public-1" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.0.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_1
+
+  # Required for EKS 
+  # Qualquer intancia lançada nessa rede pública, recebe um IP de forma automática
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Public-${var.aval_zone_1}"
+
+    # Required for EKS
+    "kubernetes.io/cluster/eks" = "shared" # Permite que EKS descubra a subnet e a use 
+    "kubernetes.io/role/elb"    = 1        # Necessário para public LoadBalance - Permite que o EKS descurbra as subredes e posicione o lb.
+  }
+
+}
+
+
+resource "aws_subnet" "subnet-public-2" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.64.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_2
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name                        = "Public-${var.aval_zone_2}"
+    "kubernetes.io/cluster/eks" = "shared"
+    "kubernetes.io/role/elb"    = 1
+  }
+
+}
+
+# --- Create Private Subnets ---
+
+resource "aws_subnet" "subnet-private-1" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.128.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_1
+
+  # Required for EKS 
+  # Qualquer intancia lançada nessa rede privada, recebe um IP de forma automática
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Private-${var.aval_zone_1}"
+
+    # Required for EKS
+    "kubernetes.io/cluster/eks" = "shared" # Permite que EKS descubra a subnet e a use 
+    "kubernetes.io/role/internal-elb"    = 1        # Necessário para private LoadBalance lançados pelo EKS Cluster- Permite que o EKS descurbra as subredes e posicione o lb.
+  }
+
+}
+
+resource "aws_subnet" "subnet-private-2" {
+  vpc_id     = aws_vpc.main-vpc.id
+  cidr_block = "192.168.192.0/18"
+
+  # AZ subnet
+  availability_zone = var.aval_zone_2
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name                        = "Private-${var.aval_zone_2}"
+    "kubernetes.io/cluster/eks" = "shared"
+    "kubernetes.io/role/internal-elb"    = 1
+  }
+
+}
+```
+
+Os tópicos em destaque nesse arquivo também ficaram claros mais adiante no tutorial. Mas podemos definir que :
+
+* `"kubernetes.io/role/internalelb" = 1` : Permite que o EKS descubra a subrede e posicione um load balancer interno, necessário para o fluxo de serviços. 
+
+Nesse ponto, sua pasta deve possuir os seguintes arquivos:
+
+```
+terraform/
+├─ provider.tf
+├─ vpc.tf
+├─ internet-gateway.tf
+├─ subnets.tf
+├─ secret.tfvars
+└─ variables.tf
+```
+
+Vamos atualizar nossa infraestrutura e verificar se o **internet-gateway** e **subnets** foram criadas no Dashboard da AWS.
+
+```bash
+    terraform fmt
+```
+```bash
+     terraform plan -var-file="secret.tfvars"
+```
+```bash
+     terraform apply -var-file="secret.tfvars"
+```
+
+Após a aplicação desses comandos, espera-se as seguintes mudanças:
+
+Em `Dashboard > VPC > Sub-redes` 
+
+<div align="center">
+<img src = "/img/terraform_subredes.png" />
+</div>
+
+Em `Dashboard > VPC > Gateways de Internet` 
+
+<div align="center">
+<img src = "/img/terraform_internet_gateway.png" />
+</div>
 
 ## Referências
 
 *[1]*: Configure instance tenancy with a launch configuration . Disponível [aqui](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-dedicated-instances.html)
+<br>
+
+*[2]*: Estabelecer conexão com a Internet usando um gateway da Internet . Disponível [aqui](https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/VPC_Internet_Gateway.html)
+<br>
+
+*[3]*: Regions and Zones . Disponível [aqui](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 <br>
