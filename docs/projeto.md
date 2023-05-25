@@ -588,6 +588,10 @@ Vamos examinar um pouco o código que definimos acima:
 
 * **Bloco `depends_on`** :  indica dependência de um recurso/módulo com o comportamento de outro recurso.
 
+::: warning Lembrete
+Atualize sua infraestrutura para verififcar as mudanças na AWS !
+:::
+
 Em `Dashboard > VPC > IPs elásticos` 
 
 <div align="center">
@@ -625,6 +629,10 @@ resource "aws_nat_gateway" "gateway-2" {
   }
 }
 ```
+
+::: warning Lembrete
+Atualize sua infraestrutura para verififcar as mudanças na AWS !
+:::
 
 Em `Dashboard > VPC > Gateways NAT` 
 
@@ -744,7 +752,106 @@ resource "aws_route_table_association" "private-2" {
 }
 ```
 
-### EKS
+::: warning Lembrete
+Atualize sua infraestrutura para verififcar as mudanças na AWS !
+:::
+
+Em `Dashboard > VPC > Tabelas de rotas` 
+
+<div align="center">
+<img src = "/img/terraform_route_table.png" />
+</div>
+
+###  Elastic Kubernetes Service
+<br>
+
+<div align="center">
+<img src = "/img/funcionamento_eks.png" />
+<caption> Funcionamento do EKS. Imagem retirada de [8] </caption>
+</div>
+
+O primeiro passo para a implementação do EKS que devemos realizar é permitir que o EKS Cluster possua a "função" de criar um recurso na AWS. 
+
+```bash
+
+resource "aws_iam_role" "eks-cluster" {
+
+  name = "eks-cluster"
+
+  # Políticas que garante permissão para essa entidade assumir o Role
+  # Role que Amazon EKS vão utilizar para criar recurso AWS para os Clusters Kubernets
+  # EKS poderá assumir o role
+  assume_role_policy = "${file("9-eks-role-policy.json")}"
+}
+
+resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
+
+  # ARN da política que queremos aplicar:
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+
+  # Quem queremos que tenha essa política
+  role = aws_iam_role.eks-cluster.name
+}
+
+```
+<br>
+
+*9-eks-role-policy.json*
+```json
+{
+    "Version" : "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "eks.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
+
+* **assume_role_policy** : Política que concede permissão a uma entidade para assumir a função. *[9]*
+
+* **policy_arn** : ARN da política que queremos aplicar. *[9]*
+
+* **role** : "Função" que queremos que tenha essa política.
+
+Com as nova políticas configuradas, podemos implementar o módulo eks.
+
+```bash
+
+resource "aws_eks_cluster" "eks" {
+  name = "eks"
+
+  # IAM role que permite que o Kubernets control interaja com AWS API , utilizando seus recursos
+  role_arn = aws_iam_role.eks-cluster.arn
+
+  vpc_config {
+
+    # Quremos que EKS crie um Endpoint Público
+    endpoint_private_access = false
+    endpoint_public_access  = true
+
+    # Subnets que quero que esse cluster use . 
+    # É necessário que exosta pelo menos 2 zonas diferentes configuradas
+    subnet_ids = [
+      aws_subnet.subnet-public-1.id,
+      aws_subnet.subnet-public-2.id,
+      aws_subnet.subnet-private-1.id,
+      aws_subnet.subnet-private-2.id
+    ]
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
+  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
+  depends_on = [
+    aws_iam_role_policy_attachment.amazon_eks_cluster_policy,
+  ]
+}
+```
+
 
 ## Subindo uma aplicação!
 
@@ -766,3 +873,7 @@ resource "aws_route_table_association" "private-2" {
 *[6]* Configure route tables. Disponível [aqui](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
 
 *[7]* AWS — VPC Route Table Overview. Disponível [aqui](https://medium.com/awesome-cloud/aws-vpc-route-table-overview-intro-getting-started-guide-5b5d65ec875f)
+
+*[8]* How does Amazon EKS work? . Disponível [aqui](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+
+*[9]* Resource: aws_iam_role . Disponível [aqui](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)
