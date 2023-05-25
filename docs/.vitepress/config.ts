@@ -33,6 +33,9 @@ export default defineConfig({
           }, {
             text: 'Projeto',
             link: '/projeto'
+          }, {
+            text: 'Finalizando',
+            link: '/finalizando'
           }
         ]
       }

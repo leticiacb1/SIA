@@ -1236,6 +1236,12 @@ Resultado esperado:
 <img src = "/img/acessando_nginx.jpeg" />
 </div>
 
+## Limpando ambiente
+
+```
+terraform destroy
+```
+
 ## Referências
 
 *[1]*: Configure instance tenancy with a launch configuration . Disponível [aqui](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-dedicated-instances.html)
