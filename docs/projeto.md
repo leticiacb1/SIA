@@ -48,9 +48,76 @@ AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 
 ## Comandos básicos Terraform
 
+* **terraform init**
+
+Inicializa o ambiente com o provider utilizado.
+
+Por exemplo, se você estiver utilizando o provider "aws", inicializa o plugin para Amazon Web Services.
+
+```bash
+terraform init
+```
+
+* **terraform plan**
+
+Mostra o plano de execução do terraform.
+
+```bash
+terraform plan
+```
+
+* **terraform apply**
+
+Este comando que cria e altera as Instâncias/Objetos no Provider de acordo com o seu terraform.
+
+```bash
+terraform apply
+```
+
+* **terraform destroy**
+
+
+```bash
+terraform destroy
+```
+
+Este comando para as Instâncias/Objetos em execução e destruindo todos os recursos que foram criados durante o processo de criação.
+
+* **terraform show**
+
+Mostra um resumo do status da sua infraestrutura terraform.
+
+```bash
+terraform show
+```
+
+* **terraform fmt**
+
+```bash
+terraform fmt
+```
+
+Formata os arquivos `.tf`
+
+* **terraform output**
+
+Mostra valor das variáveis output.
+
+```bash
+terraform output
+```
+
+::: warning Dica
+ 
+Caso não tenha familiaridade com a sintaxe do terraform, recomendo fortemente que assista o vídeo do canal [KodeKloud](https://www.youtube.com/watch?v=YcJ9IeukJL8&t=4818s) e faça os exercícios gratuitos fornecidos.
+
+Indico também a leitura da [documentação oficial](https://developer.hashicorp.com/terraform/docs).
+
+:::
+
 ## Iniciando o projeto
 
-Cria uma pasta chamada `terraform`.
+Crie uma pasta chamada `terraform`.
 
 Os arquivos **terraform** possuem extensão `.tf` , que definem a infraestrutura.
 
@@ -58,9 +125,68 @@ O terraform possui um "arquivo de referência" do seu estado chamado `terraform.
 
 ### Secret
 
-### Provider
+Nesse arquivo, termos a definição dos valores sensíveis do projeto. 
 
-O primeiro arquivo que vamos implementar é o `provider.tf`. Nesse arquivo definiremos os provedores que utilizaremos. Um provider nada mais é do que o provedor de serviços cloud que você irá utilizar em sua aplicação.
+*secret.tfvars*
+```bash
+
+AWS_REGION            = "us-east-1"
+AWS_ACCESS_KEY_ID     = <Credemcial_acesso_AWS>
+AWS_SECRET_ACCESS_KEY = <Credemcial_acesso_AWS>
+
+```
+
+::: danger Atenção
+Os valores **AWS_ACCESS_KEY_ID** e **AWS_SECRET_ACCESS_KEY** são de extrema sensibilidade. Em hipótese alguma compartilher esse arquivo.
+:::
+
+### Variables
+
+Nesse arquivo definiremos as variáveis utilizadas em todo o projeto.
+
+Os demais arquivos podem acessar os valores declarados nesse arquivo por meio da sintaxe :
+
+```bash
+var.nome_variavel
+```
+
+*variables.tf*
+
+```bash
+
+variable "AWS_REGION" {
+  description = "Região utilizada pela AWS"
+  type        = string
+
+  default = "us-east-1" # North Virginia
+}
+
+variable "AWS_ACCESS_KEY_ID" {
+  description = "Acess Key ID - Obtida via Dashboard"
+  type        = string
+  sensitive   = true
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  description = "Acess Secret Key - Obtida via Dashboard"
+  type        = string
+  sensitive   = true
+}
+
+variable "aval_zone_1" {
+  description = "Avaliable Zone 1, VPC"
+  default     = "us-east-1a"
+}
+
+variable "aval_zone_2" {
+  description = "Avaliable Zone 2, VPC"
+  default     = "us-east-1b"
+}
+```
+
+### Definindo providers
+
+Nesse arquivo definiremos os provedores que utilizaremos. Um provider nada mais é do que o provedor de serviços cloud que você irá utilizar em sua aplicação.
 
 *Provider.tf*
 ```bash
@@ -98,6 +224,26 @@ provider "kubernetes" {
 }
 
 ```
+
+### Criando nossa VPC
+
+Vamos agora criar nossa Virtual Private Cloud. Iremos analisar os códigos e seus parâmetros ao poucos.
+
+```js{1}
+resource "aws_vpc" "main-vpc" {
+
+  cidr_block       = "192.168.0.0/16"
+  
+  # --- Código omitido ---
+}
+
+```
+
+
+
+
+### Acessando a internet  | Internet gatway 
+
 
 ## Referências
 
