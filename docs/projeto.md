@@ -28,13 +28,27 @@ outline: deep
     aws configure
 ```
 
-Será pedido valores de input do usuário, preencha como o indicado a seguir:
+    Será pedido valores de input do usuário, preencha como o indicado a seguir:
 
 ```bash
 AWS_REGION            = "us-east-1"
 AWS_ACCESS_KEY_ID     = <Credenciais_de_acesso_AWS>
 AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 ```
+
+    Verifique se suas credenciais foram criadas de forma adequada:
+  
+  *Ubuntu/Deboan*
+  ```bash
+  cat ~/.aws/credentials  
+  ```
+
+    Retorno esperado:
+
+  <div align="center">
+  <img src = "/img/credenciais_aws.jpeg" />
+  </div>
+  <br>
 
 * Verifique as permissões do usuário IAM. 
 
@@ -941,7 +955,11 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 
 Por fim , devemos definir as caracteríticas das instâncias EC2 que trabalham como os **workers** do nosso Cluster EKS.
 
+
+`*eks-node-group.tf*`
 ```bash
+
+# --- Código omitido ---
 
 resource "aws_eks_node_group" "nodes-general-group" {
 
@@ -1006,7 +1024,217 @@ O código apresentado acima configura :
 
 * Caracteristicas físicas (hardware) dessas instâncias.
 
+::: warning Lembrete
+Atualize sua infraestrutura para verififcar as mudanças na AWS !
+:::
+
+Em `Dashboard > EKS >  Cluster > cluster_name` 
+
+<div align="center">
+<img src = "/img/terraform_eks.png" />
+</div>
+
+<br>
+
+#### Testando conexão
+
+Nesse ponto do tutorial, você deve possuir os seguintes arquivos:
+
+```
+terraform/
+├─ provider.tf
+├─ vpc.tf
+├─ internet-gateway.tf
+├─ subnets.tf
+├─ elastic-ips.tf
+├─ nat-gateway.tf
+├─ route-tables.tf
+├─ route-table-association.tf
+├─ eks.tf
+├─ eks-role-policy.tf
+├─ 9-eks-role-policy.json
+├─ 11-eks-node-role-policy.json
+├─ secret.tfvars
+└─ variables.tf
+```
+
+Vamos obter as configurações do kubernets por meio do comando:
+
+*Ubuntu/Debian*
+```bash
+aws eks --region <config_region> update-kubeconfig  --name <cluster_name> --porfile <aws_profile_credentials>
+```
+
+::: warning Para saber mais
+Caso queira entender melhor sobre o arquivo kubeconfig , acesse [aqui](https://docs.aws.amazon.com/pt_br/eks/latest/userguide/create-kubeconfig.html)
+:::
+
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/kubeconfig.jpeg" />
+</div>
+
+<br>
+
+Podemos agora verificar o cluster EKS que criamos anteriormente.
+
+*Ubuntu/Debian*
+```bash
+kubectl get svc
+```
+
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/kubectl_get_svc.jpeg" />
+</div>
+
 ## Subindo uma aplicação!
+
+Vamos agora subir uma aplicação **NGINX** na infraestrutura que criamos !
+
+Crie uma pasta chamada `app` no mesmo nível da pasta `terraform` que utilizamos até agora e crie os seguintes arquivos:
+
+```
+app/
+├─ deployment.yml
+└─ service.yml
+terraform/
+```
+
+*`deployment.yml`*
+
+```yml
+# Docs : https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+# Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.16.1 # Update the version of nginx from 1.14.2 to 1.16.1
+        ports:
+        - containerPort: 80
+```
+
+*`service.yml`*
+
+```yml{7,8,9,23,24}
+# --- Private Load Balance : Tax between subnets configured with tags
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-nginx-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0  # To create private load balance , default = public
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer
+# --- Public Load Balance : Expose service - Acess by internet
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-nginx-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer
+```
+
+O arquivo *`deployment.yml`* é o responsável por propriamente subir a aplicação **NGINX**.
+
+O arquivo *`service.yml`* posiciona e configura os **load-balancers** nas subredes criadas. 
+
+::: info Importante
+Lembra das tags que implementamos no arquivo `subnets.tf` ? Nesse arquivo elas são fundamentais para a implementação dos **load-balancers** nos locais certo da nossa arquitetura.
+:::
+
+O entendimento da construção dos arquivos **.yml** foge do objetivo desse tutorial, mas caso queira saber mais clique [aqui](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) e [e aqui](https://codefresh.io/learn/software-deployment/kubernetes-deployment-yaml/) e [também aqui](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/).
+
+Para subir a aplicação no container kubernets , rode:
+
+```bash
+kubectl apply -f <caminho_para_arquivo_deployment>
+
+kubectl apply -f <caminho_para_arquivo_service>
+```
+
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/deploy_app.jpeg" />
+</div>
+
+Verficando o status da aplicação que subimos:
+
+```bash
+kubectl get pods
+```
+
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/get_pods.jpeg" />
+</div>
+
+
+```bash
+kubectl get nodes
+```
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/get_nodes.jpeg" />
+</div>
+
+```bash
+kubectl get svc
+```
+
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/get_svc.jpeg" />
+</div>
+
+#### Acessando a nossa aplicação
+
+O resultado do comango **kubectl get svc** retorna um campo chamado  **EXTERNAL IP**. Conseguimos acessar nossa aplicação digitando em um navegador:
+
+```
+http://<EXTERNAL IP>
+```
+Resultado esperado:
+
+<div align="center">
+<img src = "/img/acessando_nginx.jpeg" />
+</div>
 
 ## Referências
 
@@ -1030,3 +1258,5 @@ O código apresentado acima configura :
 *[8]* How does Amazon EKS work? . Disponível [aqui](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
 
 *[9]* Resource: aws_iam_role . Disponível [aqui](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)
+
+*[10]* : Tutotial implemnetação nginc no kubernets. Disponível [aqui](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)
