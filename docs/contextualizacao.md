@@ -11,7 +11,7 @@ Nessa página será explicado melhor qual arquitetura foi utilizada para o desen
 ## Descrição do projeto
 
 Criação de uma Infraestrutura capaz de armazenar aplicações de forma escalonável.
-Objetiva-se portanto o escalonamento automático de instâncias , a depender da necessiade computacional requerida pela aplicação, hospedando conteiners Docker orquestrados pelo Kubernets.
+Objetiva-se portanto o escalonamento automático de instâncias , a depender da necessiade computacional requerida pela aplicação, hospedando conteiners Docker orquestrados pelo Kubernets. Para a configuração e orquetração dos conteiners, utilizaremos o serviço da Amazon , o EKS. 
 
 ### Diagrama Arquitetura
 
