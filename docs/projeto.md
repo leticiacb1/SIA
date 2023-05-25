@@ -46,7 +46,7 @@ AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 
 * **Kubectl** instalado e funcionando. 
 
-## Conceitos básicos Terraform
+## Conceitos básicos | Terraform
 
 * **terraform init**
 
@@ -772,6 +772,9 @@ Em `Dashboard > VPC > Tabelas de rotas`
 
 O primeiro passo para a implementação do EKS que devemos realizar é permitir que o EKS Cluster possua a "função" de criar um recurso na AWS. 
 
+
+
+*eks.tf*
 ```bash
 
 resource "aws_iam_role" "eks-cluster" {
@@ -792,6 +795,8 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
   # Quem queremos que tenha essa política
   role = aws_iam_role.eks-cluster.name
 }
+
+# --- Código omitido ---
 
 ```
 <br>
@@ -820,7 +825,11 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 
 Com as nova políticas configuradas, podemos implementar o módulo eks.
 
+
+*eks.tf*
 ```bash
+
+# --- Código omitido ---
 
 resource "aws_eks_cluster" "eks" {
   name = "eks"
@@ -851,7 +860,151 @@ resource "aws_eks_cluster" "eks" {
   ]
 }
 ```
+<br>
 
+#### Nodes do EKS
+
+Nesse ponto do tutorial possuimos o recurso EKS devidamente instanciado e com as permissões necessárias para atuar da forma que esperamos. Porém, ainda não fizemos nenhuma definição/configuração relacionada aos **workers**.
+
+Antes de iniciarmos com mais código, verifique se nesse ponto do tutorial você possui os seguintes arquivos:
+
+```
+terraform/
+├─ provider.tf
+├─ vpc.tf
+├─ internet-gateway.tf
+├─ subnets.tf
+├─ elastic-ips.tf
+├─ nat-gateway.tf
+├─ route-tables.tf
+├─ route-table-association.tf
+├─ eks.tf
+├─ 9-eks-role-policy.json
+├─ secret.tfvars
+└─ variables.tf
+```
+
+Da mesma forma que precisamos das permissões para que o EKS tivesse acesso a determinadas funções, os seus **workers** também precisam de permissões, isso será implementado no código abaixo.
+
+`eks-node-group.tf`
+
+```bash
+
+# ------- CREATE IAM Role for EKS Node Group
+resource "aws_iam_role" "node-general" {
+  
+  name = "eks-node-group-general"
+  
+  assume_role_policy = "${file("11-eks-node-role-policy.json")}"
+}
+
+# -- Políticas necessárias para o correto funcionamento dos workers:
+
+resource "aws_iam_role_policy_attachment" "amazon_eks_worker_node_policy_general" {
+
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+
+  role = aws_iam_role.node-general.name
+}
+
+resource "aws_iam_role_policy_attachment" "amazon_eks_cni_policy_general" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.node-general.name
+}
+
+# Download private images from Ec2 repository
+resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_only" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.node-general.name
+}
+
+# --- Código omitido ---
+
+```
+<br>
+
+*11-eks-node-role-policy.json*
+```json
+{
+    "Version" : "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
+
+Por fim , devemos definir as caracteríticas das instâncias EC2 que trabalham como os **workers** do nosso Cluster EKS.
+
+```bash
+
+resource "aws_eks_node_group" "nodes-general-group" {
+
+  cluster_name    = aws_eks_cluster.eks.name
+  node_group_name = "Nodes-general-group"
+
+  # Permissões para o EKS Nodes
+  node_role_arn = aws_iam_role.node-general.arn
+
+  # Identificar as EC2 Subnets para associar ao EKS-Node-Group
+  # Essas subnets devem ter tags obrigatórias
+  # Public-subnets serão apenas utilizadas pelo load-balancer,
+  subnet_ids = [
+    aws_subnet.subnet-private-1.id,
+    aws_subnet.subnet-private-2.id,
+  ]
+
+  # Configuração de escalabilidade:
+  scaling_config {
+    desired_size = 2 #  Worker nodes desejados
+    max_size     = 2 #  Maior número de works-nodes 
+    min_size     = 2 #  Menor número de works-nodes 
+  }
+
+  # Type of AMAZON-Machine
+  ami_type = "AL2_x86_64"
+
+  # Type of Capacity
+  capacity_type = "ON_DEMAND"
+
+  # Disk size (GB) para os workers
+  disk_size = 20
+
+  force_update_version = false
+  instance_types       = ["t3.small"]
+
+  labels = {
+    "role" = "nodes-general"
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  depends_on = [
+    aws_iam_role_policy_attachment.amazon_eks_worker_node_policy_general,
+    aws_iam_role_policy_attachment.amazon_eks_cni_policy_general,
+    aws_iam_role_policy_attachment.amazon_ec2_container_registry_read_only
+  ]
+}
+```
+
+O código apresentado acima configura :
+
+* As permissões que esses workers possuem.
+
+* As subredes onde as instâncias deveram ser criadas (no caso desse projeto, as instâncias devem ser criadas apenas nas subredes privadas).
+
+* Configuração de **escalabilidade** , permitindo que mais ou menos instâncias EC2 sejam criadas a depender da demanda.
+
+* Caracteristicas físicas (hardware) dessas instâncias.
 
 ## Subindo uma aplicação!
 
