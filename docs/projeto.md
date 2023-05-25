@@ -565,6 +565,66 @@ Em `Dashboard > VPC > Gateways de Internet`
 <img src = "/img/terraform_internet_gateway.png" />
 </div>
 
+### Elastic IPs
+
+Um endereço IP elástico é um endereço IPv4 estático projetado para computação em nuvem dinâmica.*[4]* 
+
+Para exmeplificar imagine que você deseja entrar via SSH na sua instância EC2, para fazer isso via terminal você precisará o IPv4 da sua instância , esse IP foi dado a instância automaticamente após a sua criação. S e por algum motivo essa instância tenha sido interrompida (pausada/parada), ao retornar a atividade ela voltará com outro IPv4 e para comunicação SSH precisaremos específicar esse novo IP.
+
+Utilizando o memso contexto, caso essa instância esteja com o Elastic IP configurado, ao retornar a atividade ela manterá o seu endereço IPv4.
+
+*elastic-ips.tf*
+```bash
+resource "aws_eip" "nat1" {
+  depends_on = [aws_internet_gateway.main]
+}
+
+resource "aws_eip" "nat2" {
+  depends_on = [aws_internet_gateway.main]
+}
+```
+
+Vamos examinar um pouco o código que definimos acima:
+
+* **Bloco `depends_on`** :  indica dependência de um recurso/módulo com o comportamento de outro recurso.
+
+### NAT Gateways
+
+Um gateway NAT é um serviço Network Address Translation (NAT). Você pode usar um gateway NAT para que as instâncias em uma sub-rede privada possam se conectar a serviços fora de sua VPC, mas os serviços externos não podem iniciar uma conexão com essas instâncias. *[5]*
+
+
+*nat-gateways.tf*
+```bash
+resource "aws_nat_gateway" "gateway-1" {
+
+  # Aloca ELastic IP para o gateway
+  # Tranforma private-IP-address em public-IP-address para conseguir Acesso a internet
+  allocation_id = aws_eip.nat1.id
+
+  # Public subnet que colocaremos o gateway
+  subnet_id = aws_subnet.subnet-public-1.id
+
+  tags = {
+    Name = "NAT 1"
+  }
+}
+
+resource "aws_nat_gateway" "gateway-2" {
+
+  allocation_id = aws_eip.nat2.id
+  subnet_id     = aws_subnet.subnet-public-2.id
+
+  tags = {
+    Name = "NAT 2"
+  }
+}
+```
+
+### Route Tables
+
+
+### EKS
+
 ## Referências
 
 *[1]*: Configure instance tenancy with a launch configuration . Disponível [aqui](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-dedicated-instances.html)
@@ -575,3 +635,7 @@ Em `Dashboard > VPC > Gateways de Internet`
 
 *[3]*: Regions and Zones . Disponível [aqui](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 <br>
+
+*[4]*: Elastic IP addresses. Disponível [aqui](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+
+*[5]*: NAT gateways. Disponível [aqui](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
