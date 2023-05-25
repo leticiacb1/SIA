@@ -588,6 +588,12 @@ Vamos examinar um pouco o código que definimos acima:
 
 * **Bloco `depends_on`** :  indica dependência de um recurso/módulo com o comportamento de outro recurso.
 
+Em `Dashboard > VPC > IPs elásticos` 
+
+<div align="center">
+<img src = "/img/terraform_ip_elastico.png" />
+</div>
+
 ### NAT Gateways
 
 Um gateway NAT é um serviço Network Address Translation (NAT). Você pode usar um gateway NAT para que as instâncias em uma sub-rede privada possam se conectar a serviços fora de sua VPC, mas os serviços externos não podem iniciar uma conexão com essas instâncias. *[5]*
@@ -620,10 +626,127 @@ resource "aws_nat_gateway" "gateway-2" {
 }
 ```
 
+Em `Dashboard > VPC > Gateways NAT` 
+
+<div align="center">
+<img src = "/img/terraform_nat_gateways.png" />
+</div>
+
 ### Route Tables
 
+Uma tabela de rotas contém um conjunto de regras, chamadas de routes, que são usadas para determinar para onde o tráfego de rede de sua sub-rede ou gateway é direcionado. Simplificando, ela informa aos pacotes de rede qual caminho eles precisam seguir para chegar ao seu destino.*[6,7]*
+
+* Cada sub-rede em seu VPC deve estar associada a uma tabela de roteamento, que controla o roteamento da sub-rede (tabela de roteamento de sub-rede). 
+
+Cada rota da tabela especifica um destino e um alvo.Por exemplo, para permitir que a sub-rede acesse a Internet por meio de um gateway da Internet, adicione a seguinte rota à tabela de rotas de sub-rede:
+
+| Destino       |      Alvo     | 
+| ------------- | :-----------: | 
+| 0.0.0.0/0     |     idw-id    | 
+
+O destino da rota é 0.0.0.0/0, que representa todos os endereços IPv4. O alvo é o gateway da Internet que está conectado à sua VPC.
+
+*route-tables.tf*
+```bash
+# Default  trial to internet gateway
+resource "aws_route_table" "public" {
+
+  vpc_id = aws_vpc.main-vpc.id
+
+  # Qualquer IP - main-route-table
+  #         Para : internet-gateway da VPC
+
+  route {
+    cidr_block = "0.0.0.0/0"
+
+    # Identificar a nossa VPC internet gateway
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = {
+    Name = "public-route-table"
+  }
+}
+
+
+# 2 routing tabels para NATs gateways
+
+resource "aws_route_table" "private-1" {
+
+  vpc_id = aws_vpc.main-vpc.id
+
+  # Qualquer IP - main-route-table
+  #         Para : internet-gateway da subnet-public-1
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.gateway-1.id
+  }
+
+  tags = {
+    Name = "private1-route-table"
+  }
+}
+
+resource "aws_route_table" "private-2" {
+
+  vpc_id = aws_vpc.main-vpc.id
+
+  # Qualquer IP - main-route-table
+  #         Para : internet-gateway da subnet-public-2
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.gateway-2.id
+  }
+
+  tags = {
+    Name = "private2-route-table"
+  }
+}
+```
+
+Agora recisamos realizar a associação entre as tabelas de rotas e suas respectivas subredes.
+
+*route-table-assocition*
+```bash
+
+# Associar as subnets publicas criadas com suas respectivas 
+# ---- Public Routeing Table ----
+resource "aws_route_table_association" "public-1" {
+
+  subnet_id      = aws_subnet.subnet-public-1.id
+  route_table_id = aws_route_table.public.id
+
+}
+
+resource "aws_route_table_association" "public-2" {
+
+  subnet_id      = aws_subnet.subnet-public-2.id
+  route_table_id = aws_route_table.public.id
+
+}
+
+# ---- Private Routeing Table ----
+
+resource "aws_route_table_association" "private-1" {
+
+  subnet_id      = aws_subnet.subnet-private-1.id
+  route_table_id = aws_route_table.private-1.id
+
+}
+
+resource "aws_route_table_association" "private-2" {
+
+  subnet_id      = aws_subnet.subnet-private-2.id
+  route_table_id = aws_route_table.private-2.id
+
+}
+```
 
 ### EKS
+
+## Subindo uma aplicação!
 
 ## Referências
 
@@ -639,3 +762,7 @@ resource "aws_nat_gateway" "gateway-2" {
 *[4]*: Elastic IP addresses. Disponível [aqui](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
 
 *[5]*: NAT gateways. Disponível [aqui](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+
+*[6]* Configure route tables. Disponível [aqui](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
+
+*[7]* AWS — VPC Route Table Overview. Disponível [aqui](https://medium.com/awesome-cloud/aws-vpc-route-table-overview-intro-getting-started-guide-5b5d65ec875f)

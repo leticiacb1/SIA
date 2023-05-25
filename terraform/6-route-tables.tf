@@ -1,10 +1,6 @@
 # Reagras que determinam para onde o tráfico de internet 
 # (da sua subnet ou gateway) é direcionado
 
-# --- ROUTE TABLE ---
-# Coluna1 :  Destination  (Range de Ips para oned queremos que o tráfico vá)    
-# Coluna2 :  Target (Trafico de destino , ex. internet gateway)
-
 # Default  trial to internet gateway
 resource "aws_route_table" "public" {
 
