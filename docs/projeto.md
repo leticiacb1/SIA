@@ -1085,9 +1085,12 @@ Crie uma pasta chamada `app` no mesmo nível da pasta `terraform` que utilizamos
 ```
 app/
 ├─ deployment.yml
-└─ service.yml
+├─ external-load-balancer.yml
+└─ internal-load-balancer.yml
 terraform/
 ```
+
+<br>
 
 *`deployment.yml`*
 
@@ -1117,9 +1120,11 @@ spec:
         - containerPort: 80
 ```
 
-*`service.yml`*
+<br>
 
-```yml{7,8,9,23,24}
+*`internal-load-balancer.yml`*
+
+```yml{7,8,9}
 # --- Private Load Balance : Tax between subnets configured with tags
 apiVersion: v1
 kind: Service
@@ -1136,6 +1141,12 @@ spec:
   selector:
     app: nginx
   type: LoadBalancer
+```
+
+<br>
+
+*`external-load-balancer.yml`*
+```yml{7,8}
 # --- Public Load Balance : Expose service - Acess by internet
 apiVersion: v1
 kind: Service
@@ -1172,12 +1183,16 @@ Para subir a aplicação no container kubernets , rode:
 ```bash
 kubectl apply -f <caminho_para_arquivo_deployment>
 
-kubectl apply -f <caminho_para_arquivo_service>
+kubectl apply -f <caminho_para_arquivo_internal-load-balancer>
+
+kubectl apply -f <caminho_para_arquivo_external-load-balancer>
 ```
 
 Resultado esperado:
 
-<ImgZoom src="/img/deploy_app.jpeg" title="Features image" alt="Features image"></ImgZoom>
+<ImgZoom src="/img/deploy_app_1.jpeg" title="Features image" alt="Features image"></ImgZoom>
+
+<ImgZoom src="/img/deploy_app_2.png" title="Features image" alt="Features image"></ImgZoom>
 
 Verficando o status da aplicação que subimos:
 
@@ -1209,7 +1224,7 @@ Resultado esperado:
 O resultado do comango **kubectl get svc** retorna um campo chamado  **EXTERNAL IP**. Conseguimos acessar nossa aplicação digitando em um navegador:
 
 ```
-http://<EXTERNAL IP>
+http://<EXTERNAL-IP-EXTERNAL-LOAD-BALANCER>
 ```
 Resultado esperado:
 

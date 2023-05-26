@@ -1,0 +1,15 @@
+# --- Public Load Balance : Expose service - Acess by internet
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-nginx-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer
