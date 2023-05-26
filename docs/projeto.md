@@ -383,7 +383,7 @@ O único argumento obrigatório desse recurso é o ID da VPC. Esse argumento ind
 
 ### Subredes
 
-Como é possível ver no diagrama do projeto indicado anteriomente, queremos que nossa VPC possua um total de **4 subrede** , sendo 2 públicas e 2 privadas e **2 Zonas de Disponibilidade**.
+Como é possível ver no diagrama do projeto indicado anteriomente, queremos que nossa VPC possua um total de **4 subrede** , sendo 2 públicas e 2 privadas. Ela também deve possuir **2 Zonas de Disponibilidade**.
 
 O conceito de subrede publica e privada ficará mais claramente definida adiante.
 
