@@ -2,7 +2,7 @@
 
 #### Deploy
 
-[Acessar tutorial do projeto]()
+[Acessar tutorial do projeto](https://leticiacb1.github.io/SIA/)
 
 
 #### Executando o tutorial localmente
