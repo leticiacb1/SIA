@@ -36,7 +36,7 @@ Canais e sites que foram de extrema importância para a produção desse tutoria
 
 ## Agradecimentos
 
-* Luciano Félix | [Github](https://github.com/FelixLuciano) : Template do site de toda a documentação . 
+* Luciano Felix | [Github](https://github.com/FelixLuciano) : Template do site de toda a documentação . 
 
     Feito utilizando [Vitepresse](https://vitepress.dev/guide/what-is-vitepress).
 
