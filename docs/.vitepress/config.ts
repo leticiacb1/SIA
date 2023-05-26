@@ -5,7 +5,7 @@ export default defineConfig({
 
   base: '/SIA/',   // Para deploy no Github Pages
 
-  title: "SIA - Scalable infrastructure for applications",
+  title: "SIA",
   description: "Tutorial de criação de uma infraestrutura escalonável para aplicações na AWS",
 
   themeConfig: {

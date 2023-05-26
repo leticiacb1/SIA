@@ -1,5 +1,5 @@
 ---
-sidebar: false
+#sidebar: false
 hero: true
 outline: deep
 ---
@@ -38,7 +38,7 @@ AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 
     Verifique se suas credenciais foram criadas de forma adequada:
   
-  *Ubuntu/Deboan*
+  *Ubuntu/Debian*
   ```bash
   cat ~/.aws/credentials  
   ```
@@ -145,7 +145,7 @@ O terraform possui um "arquivo de referência" do seu estado chamado `terraform.
 
 Nesse arquivo, termos a definição dos valores sensíveis do projeto. 
 
-*secret.tfvars*
+*`secret.tfvars`*
 ```bash
 
 AWS_REGION            = "us-east-1"
@@ -168,7 +168,7 @@ Os demais arquivos podem acessar os valores declarados nesse arquivo por meio da
 var.nome_variavel
 ```
 
-*variables.tf*
+*`variables.tf`*
 
 ```bash
 
@@ -206,7 +206,7 @@ variable "aval_zone_2" {
 
 Nesse arquivo definiremos os provedores que utilizaremos. Um provider nada mais é do que o provedor de serviços cloud que você irá utilizar em sua aplicação.
 
-*Provider.tf*
+*`provider.tf`*
 ```bash
 
 terraform {
@@ -292,7 +292,7 @@ Para mais informações, acesse [aqui](https://docs.aws.amazon.com/eks/latest/us
 
 Por fim , podemos definir o arquivo `vpc.tf`:
 
-*vpc.tf*
+*`vpc.tf`*
 ```bash
 # VPC
 resource "aws_vpc" "main-vpc" {
@@ -369,7 +369,7 @@ Veja novamente o tópico [Dashboard AWS- Criando uma VPC](./dashboard) e procure
 
 O **Internet gatway** é um componente da VPC  redundante e altamente disponível que permite a comunicação entre a VPC e a Internet. *[2]* 
 
-*internet-gateway.tf*
+*`internet-gateway.tf`*
 ```bash
 resource "aws_internet_gateway" "main" {
 
@@ -389,7 +389,7 @@ Como é possível ver no diagrama do projeto indicado anteriomente, queremos que
 
 O conceito de subrede publica e privada ficará mais claramente definida adiante.
 
-*subnets.tf*
+*`subnets.tf`*
 ```bash{19,22,39,40}
 # --- Create Public Subnets ---
 
@@ -453,7 +453,7 @@ Os tópicos destacados no código serão melhor entendidos adiante, mas de forma
 
 Podemos completar o código adicionando também as subredes privadas.
 
-*subnets.tf*
+*`subnets.tf`*
 ```bash{60,77}
 # --- Create Public Subnets ---
 
@@ -587,7 +587,7 @@ Para exmeplificar imagine que você deseja entrar via SSH na sua instância EC2,
 
 Utilizando o memso contexto, caso essa instância esteja com o Elastic IP configurado, ao retornar a atividade ela manterá o seu endereço IPv4.
 
-*elastic-ips.tf*
+*`elastic-ips.tf`*
 ```bash
 resource "aws_eip" "nat1" {
   depends_on = [aws_internet_gateway.main]
@@ -617,7 +617,7 @@ Em `Dashboard > VPC > IPs elásticos`
 Um gateway NAT é um serviço Network Address Translation (NAT). Você pode usar um gateway NAT para que as instâncias em uma sub-rede privada possam se conectar a serviços fora de sua VPC, mas os serviços externos não podem iniciar uma conexão com essas instâncias. *[5]*
 
 
-*nat-gateways.tf*
+*`nat-gateways.tf`*
 ```bash
 resource "aws_nat_gateway" "gateway-1" {
 
@@ -668,7 +668,7 @@ Cada rota da tabela especifica um destino e um alvo.Por exemplo, para permitir q
 
 O destino da rota é 0.0.0.0/0, que representa todos os endereços IPv4. O alvo é o gateway da Internet que está conectado à sua VPC.
 
-*route-tables.tf*
+*`route-tables.tf`*
 ```bash
 # Default  trial to internet gateway
 resource "aws_route_table" "public" {
@@ -730,7 +730,7 @@ resource "aws_route_table" "private-2" {
 
 Agora recisamos realizar a associação entre as tabelas de rotas e suas respectivas subredes.
 
-*route-table-assocition*
+*`route-table-assocition.tf`*
 ```bash
 
 # Associar as subnets publicas criadas com suas respectivas 
@@ -788,7 +788,7 @@ O primeiro passo para a implementação do EKS que devemos realizar é permitir 
 
 
 
-*eks.tf*
+*`eks.tf`*
 ```bash
 
 resource "aws_iam_role" "eks-cluster" {
@@ -815,7 +815,7 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 ```
 <br>
 
-*9-eks-role-policy.json*
+*`9-eks-role-policy.json`*
 ```json
 {
     "Version" : "2012-10-17",
@@ -840,7 +840,7 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 Com as nova políticas configuradas, podemos implementar o módulo eks.
 
 
-*eks.tf*
+*`eks.tf`*
 ```bash
 
 # --- Código omitido ---
@@ -900,7 +900,7 @@ terraform/
 
 Da mesma forma que precisamos das permissões para que o EKS tivesse acesso a determinadas funções, os seus **workers** também precisam de permissões, isso será implementado no código abaixo.
 
-`eks-node-group.tf`
+*`eks-node-group.tf`*
 
 ```bash
 
@@ -937,7 +937,7 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 ```
 <br>
 
-*11-eks-node-role-policy.json*
+*`11-eks-node-role-policy.json`*
 ```json
 {
     "Version" : "2012-10-17",
@@ -956,7 +956,7 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 Por fim , devemos definir as caracteríticas das instâncias EC2 que trabalham como os **workers** do nosso Cluster EKS.
 
 
-`*eks-node-group.tf*`
+*`eks-node-group.tf`*
 ```bash
 
 # --- Código omitido ---
@@ -1020,7 +1020,11 @@ O código apresentado acima configura :
 
 * As subredes onde as instâncias deveram ser criadas (no caso desse projeto, as instâncias devem ser criadas apenas nas subredes privadas).
 
-* Configuração de **escalabilidade** , permitindo que mais ou menos instâncias EC2 sejam criadas a depender da demanda.
+* Configuração de **escalabilidade** , permitindo que mais ou menos instâncias EC2 sejam criadas a depender da demanda. 
+
+::: warning Atenção
+Escolhi deixar o valor "fixo" de apenas 2 instâncias, para manter o formato do diagrama do projeto apresentado em [Entendendo o Projeto](./contextualizacao.md), mas alterando esses parâmetros conseguimos a criação de mais ou meno instância a depender da demanda.
+:::
 
 * Caracteristicas físicas (hardware) dessas instâncias.
 
@@ -1175,6 +1179,10 @@ O arquivo *`service.yml`* posiciona e configura os **load-balancers** nas subred
 Lembra das tags que implementamos no arquivo `subnets.tf` ? Nesse arquivo elas são fundamentais para a implementação dos **load-balancers** nos locais certo da nossa arquitetura.
 :::
 
+::: warning Atenção 
+O kubernets está sendo o responsável pela criação dos **load balancers**. E após subirmos a aplicação é possível observar que os load balancers foram criados no Dashboard da Amazon (`Painel EC2 > Balanceamento de carga > Load balancers`). 
+:::
+
 O entendimento da construção dos arquivos **.yml** foge do objetivo desse tutorial, mas caso queira saber mais clique [aqui](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) e [e aqui](https://codefresh.io/learn/software-deployment/kubernetes-deployment-yaml/) e [também aqui](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/).
 
 Para subir a aplicação no container kubernets , rode:
@@ -1238,6 +1246,20 @@ Resultado esperado:
 
 ## Limpando ambiente
 
+Como reforçado anteriormente, o terraform não foi o responsávle pela criação dos load balancers da nossa
+aplicação. Dessa forma, o terraform não possui a permissão para "deletar" serviços não configurados por ele.
+
+Assim , antes de aplicarmos o comando para limpar o ambiente (**terraform destroy**) , devemos manualmente deletar os load_balancer criados no via Dashboard da Amazon.
+
+Em `Painel EC2 > Balanceamento de carga > Load balancers`:
+
+<div align="center">
+<img src = "/img/deleta_load_balancers.jpeg" />
+</div>
+
+
+Após isso podemos realizar a limpeza via terraform:
+
 ```
 terraform destroy
 ```
@@ -1265,4 +1287,4 @@ terraform destroy
 
 *[9]* Resource: aws_iam_role . Disponível [aqui](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)
 
-*[10]* : Tutotial implemnetação nginc no kubernets. Disponível [aqui](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)
+*[10]* : Tutorial de implementação NGINX no kubernets. Disponível [aqui](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)

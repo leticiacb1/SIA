@@ -1,5 +1,5 @@
 ---
-sidebar: false
+#sidebar: false
 hero: true
 outline: deep
 ---
