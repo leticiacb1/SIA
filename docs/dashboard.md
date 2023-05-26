@@ -34,20 +34,20 @@ Aqui , demonstrarei passo a passo como ocorre a criação de uma VPC no Dashboar
 
 <br>
 
-<div align="center">
-<img src = "/img/VPC_barra_pesquisa.png" />
-<caption>Fluxo para criação da VPC - Parte 1</caption>
-</div>
+<ImgZoom src="/img/VPC_barra_pesquisa.png" title="Features image" alt="Features image">
+    <div class="image-center">Fluxo para criação da VPC - Parte 1</div>
+</ImgZoom>
+
 <br>
 
 * **2.** Clique em *"Criar VPC"*.
 
 <br>
 
-<div align="center">
-<img src = "/img/cria_VPC_1.png" />
-<caption>Fluxo para criação da VPC - Parte 2</caption>
-</div>
+<ImgZoom src="/img/cria_VPC_1.png" title="Features image" alt="Features image">
+    <div class="image-center">Fluxo para criação da VPC - Parte 2</div>
+</ImgZoom>
+
 <br>
 
 ::: details Suas VPCs
@@ -68,10 +68,10 @@ Na opção *"Suas VPCs"* no menu lateral esquerdo é possível visualizar as VPC
 
 <br>
 
-<div align="center">
-<img src = "/img/cria_VPC_4.png" />
-<caption>Visualização da tabela de Rotas e Subredes da VPC </caption>
-</div>
+<ImgZoom src="/img/cria_VPC_4.png" title="Features image" alt="Features image">
+    <div class="image-center">Visualização da tabela de Rotas e Subredes da VPC</div>
+</ImgZoom>
+
 <br>
 
 :::  warning Lembrete
@@ -88,47 +88,44 @@ Antes da criação da nossa instancia EC2 é necessário a configuração de **c
 
 As chaves de acesso são um conjunto de credenciais de seguranças usadas para provar a identidade ao tentarmos nos conectar a uma instancia EC2. Trata-se de um par de chaves, uma chave pública e uma chave privada, o Amazon EC2 armazena a chave pública na instância, e você armazena a chave privada. *[1]*
 
-<div align="center">
-<img src = "/img/cria_key_pair_1.png" />
-<caption> Criação das chaves de acesso - Parte 1</caption>
-</div>
+<ImgZoom src="/img/cria_key_pair_1.png" title="Features image" alt="Features image">
+    <div class="image-center">Criação das chaves de acesso - Parte 1</div>
+</ImgZoom>
 
 <br>
 
-<div align="center">
-<img src = "/img/cria_key_pair_2.png" />
-<caption> Criação das chaves de acesso - Parte 2</caption>
-</div>
+<ImgZoom src="/img/cria_key_pair_2.png" title="Features image" alt="Features image">
+    <div class="image-center">Criação das chaves de acesso - Parte 2</div>
+</ImgZoom>
+
 <br>
 
 ### Criando um grupo AutoScaling
 
 O grupo Auto Scaling configura um conjunto de instâncias do EC2 para serem tratadas como um agrupamento lógico, buscando escalabilidade automática.O tamanho de um grupo do Auto Scaling depende do número de instâncias definidas como a capacidade desejada. É possível ajustar o tamanho do grupo para atender à demanda, manualmente ou usando a escalabilidade automática.*[2]*
 
-<div align="center">
-<img src = "/img/autoScaling_1.png" />
-<caption> Criando grupo Auto Scaling para as instâncias  - Parte 1 </caption>
-</div>
+<ImgZoom src="/img/autoScaling_1.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando grupo Auto Scaling para as instâncias  - Parte 1 </div>
+</ImgZoom>
 
 <br>
 
-<div align="center">
-<img src = "/img/autoScaling_2.png" />
-<caption> Criando grupo Auto Scaling para as instâncias - Parte 2</caption>
-</div>
-<br>
-
-<div align="center">
-<img src = "/img/mecanismo_execucao.png" />
-<caption> Criando um modelo de execução. Deve-se preencher os campos de acordo com as configurações desejadas. </caption>
-</div>
+<ImgZoom src="/img/autoScaling_2.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando grupo Auto Scaling para as instâncias  - Parte 2 </div>
+</ImgZoom>
 
 <br>
 
-<div align="center">
-<img src = "/img/autoScaling_3.png" />
-<caption> Criando grupo Auto Scaling para as instâncias - Parte 3</caption>
-</div>
+<ImgZoom src="/img/mecanismo_execucao.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando um modelo de execução. Deve-se preencher os campos de acordo com as configurações desejadas. </div>
+</ImgZoom>
+
+<br>
+
+<ImgZoom src="/img/autoScaling_3.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando grupo Auto Scaling para as instâncias - Parte 3 </div>
+</ImgZoom>
+
 
 <br>
 
@@ -143,17 +140,16 @@ Por motivos de praticidade (são muitos passos de configuração), não vou expo
 
 * **1.** No "Painel do EC2" , busque por "Grupo de Segurança".Clique em "Criar grupo de Segurança".
 
-<div align="center">
-<img src = "/img/grupo_seguranca_1.png" />
-<caption> Criando grupo de Segurança - Parte 1 </caption>
-</div>
+<ImgZoom src="/img/grupo_seguranca_1.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando grupo de Segurança - Parte 1 </div>
+</ImgZoom>
 
 <br>
 
-<div align="center">
-<img src = "/img/grupo_seguranca_2.png" />
-<caption> Criando grupo de Segurança - Parte 2 </caption>
-</div>
+
+<ImgZoom src="/img/grupo_seguranca_2.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criando grupo de Segurança - Parte 2 </div>
+</ImgZoom>
 
 :::  warning Cuidado
 Para realizar a conexão com a instância via **SSH** é necessário que a instância possua as **regras de entrada** específicas ! 
@@ -166,10 +162,9 @@ Verifique também se a instância está sendo criada na VPC desejada!
 
 * **1.** Busque por **"EC2"** na barra de pesquisa.
 
-<div align="center">
-<img src = "/img/instancia_ec2_1.png" />
-<caption> Criando uma instância - Parte 1 </caption>
-</div>
+<ImgZoom src="/img/instancia_ec2_1.png" title="Features image" alt="Features image">
+    <div class="image-center">  Criando uma instância - Parte 1 </div>
+</ImgZoom>
 
 <br>
 
@@ -193,44 +188,44 @@ O nosso próximo passo será o acesso da instância que criamos via SSH. Para is
 ### Anexando o grupo AutoScaling a instância
 <br>
 
-<div align="center">
-<img src = "/img/ConfiguraAutoScaling_1.png" />
-<caption> Anexando AutoScaling - Parte 1 </caption>
-</div>
-<br>
+<ImgZoom src="/img/ConfiguraAutoScaling_1.png" title="Features image" alt="Features image">
+    <div class="image-center">  Anexando AutoScaling - Parte 1 </div>
+</ImgZoom>
 
-<div align="center">
-<img src = "/img/ConfiguraAutoScaling_2.png" />
-<caption> Anexando AutoScaling - Parte 2 </caption>
-</div>
+
+<ImgZoom src="/img/ConfiguraAutoScaling_2.png" title="Features image" alt="Features image">
+    <div class="image-center">  Anexando AutoScaling - Parte 2 </div>
+</ImgZoom>
+
 
 ### Testando conexão com a instância
 
 * **1.** A conexão com a instância pode ser feita tanto por meio do Dashboard da AWS ou pelo seu terminal.
 
-<div align="center">
-<img src = "/img/ec2_ssh_5.png" />
-<caption> Conexão com EC2  </caption>
-</div>
+<ImgZoom src="/img/ec2_ssh_5.png" title="Features image" alt="Features image">
+    <div class="image-center"> Conexão com EC2 </div>
+</ImgZoom>
+
 <br>
 
-<div align="center">
-<img src = "/img/ec2_ssh_2.png" />
-<caption> Conexão com EC2 utilizando o prório Dashboard </caption>
-</div>
+<ImgZoom src="/img/ec2_ssh_2.png" title="Features image" alt="Features image">
+    <div class="image-center">   Conexão com EC2 utilizando o prório Dashboard   </div>
+</ImgZoom>
+
+
 <br>
 
-<div align="center">
-<img src = "/img/ec2_ssh_3.png" />
-<caption> Conexão com EC2 por meio do terminal local </caption>
-</div>
+<ImgZoom src="/img/ec2_ssh_3.png" title="Features image" alt="Features image">
+    <div class="image-center"> Conexão com EC2 por meio do terminal local </div>
+</ImgZoom>
+
 <br>
 
-<div align="center">
-<img src = "/img/ec2_ssh_4.png" />
-<caption> Conexão via SSH bem sucedida </caption>
-</div>
-<br>
+
+<ImgZoom src="/img/ec2_ssh_4.png" title="Features image" alt="Features image">
+    <div class="image-center"> Conexão via SSH bem sucedida </div>
+</ImgZoom>
+
 
 ## Criando um cluster EKS
 
@@ -238,32 +233,31 @@ O nosso próximo passo será o acesso da instância que criamos via SSH. Para is
 
 * **1.**  Busque na barra de pesquisa por "EKS"
 
-<div align="center">
-<img src = "/img/criar_eks_0.png" />
-<caption> Buscando pelo serviço EKS </caption>
-</div>
+<ImgZoom src="/img/criar_eks_0.png" title="Features image" alt="Features image">
+    <div class="image-center"> Buscando pelo serviço EKS </div>
+</ImgZoom>
+
 <br>
 
 * **2.** Clique em criar cluster. E siga o passo a passo para a criação do cluster com as especificações desejadas.
 
-<div align="center">
-<img src = "/img/criar_eks_1.png" />
-<caption> Criar cluster eks - Parte 1</caption>
-</div>
+<ImgZoom src="/img/criar_eks_1.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criar cluster eks - Parte 1 </div>
+</ImgZoom>
+
 <br>
 
-<div align="center">
-<img src = "/img/criar_eks_2.png" />
-<caption> Criar cluster eks - Parte 2 </caption>
-</div>
+<ImgZoom src="/img/criar_eks_2.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criar cluster eks - Parte 2 </div>
+</ImgZoom>
+
 <br>
 
-<div align="center">
-<img src = "/img/criar_eks_3.png" />
-<caption> Criar cluster eks - Parte 3 </caption>
-</div>
-<br>
+<ImgZoom src="/img/criar_eks_3.png" title="Features image" alt="Features image">
+    <div class="image-center"> Criar cluster eks - Parte 3 </div>
+</ImgZoom>
 
+<br>
 
 <div align="center">
 <img src = "/img/criar_eks_4.png" />

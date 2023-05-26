@@ -102,3 +102,15 @@
   .aside-curtain {
     display: none;
   }
+
+ /**
+   * Component: ImgZoom
+   * -------------------------------------------------------------------------- */
+
+  img, video, iframe {
+    border-radius: .25rem;
+  }
+  
+  iframe {
+      max-width: 100%;
+  }

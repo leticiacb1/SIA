@@ -45,9 +45,10 @@ AWS_SECRET_ACCESS_KEY = <Credenciais_de_acesso_AWS>
 
     Retorno esperado:
 
-  <div align="center">
-  <img src = "/img/credenciais_aws.jpeg" />
-  </div>
+  <ImgZoom src="/img/credenciais_aws.jpeg" title="Features image" alt="Features image">
+    <div class="image-center"> Credenciais aws </div>
+  </ImgZoom>
+
   <br>
 
 * Verifique as permissões do usuário IAM. 
@@ -121,9 +122,9 @@ terraform output
 
 De forma geral , podemos deifnir o formato para a declaração dos blocos de recurso de forma simplificada como o indicado na imagem abaixo.
 
-<div align="center">
-<img src = "/img/bloco_terraform_definicao.png" />
-</div>
+ <ImgZoom src="/img/bloco_terraform_definicao.png" title="Features image" alt="Features image">
+    <div class="image-center"> Definição construção de blocos terraform </div>
+  </ImgZoom>
 
 ::: warning Dica
  
@@ -349,10 +350,7 @@ Nesse ponto, podemos dar o nosso primeiros comando terraform e verificar se a no
 
 Após a aplicação desses comandos, espera-se que seu `Dashboard > VPC > Suas VPCs` esteja como o indicado abaixo:
 
-<div align="center">
-<img src = "/img/terraform_vpc.png" />
-</div>
-
+<ImgZoom src="/img/terraform_vpc.png" title="Features image" alt="Features image"></ImgZoom>
 
 ::: info INFO
 A flag **"var-file"** indica que o arquivo **"secret.tfvars"** deve servir como um "input" do usuário para execução do comando.
@@ -569,15 +567,11 @@ Após a aplicação desses comandos, espera-se as seguintes mudanças:
 
 Em `Dashboard > VPC > Sub-redes` 
 
-<div align="center">
-<img src = "/img/terraform_subredes.png" />
-</div>
+<ImgZoom src="/img/terraform_subredes.png" title="Features image" alt="Features image"></ImgZoom>
 
 Em `Dashboard > VPC > Gateways de Internet` 
 
-<div align="center">
-<img src = "/img/terraform_internet_gateway.png" />
-</div>
+<ImgZoom src="/img/terraform_internet_gateway.png" title="Features image" alt="Features image"></ImgZoom>
 
 ### Elastic IPs
 
@@ -608,9 +602,7 @@ Atualize sua infraestrutura para verififcar as mudanças na AWS !
 
 Em `Dashboard > VPC > IPs elásticos` 
 
-<div align="center">
-<img src = "/img/terraform_ip_elastico.png" />
-</div>
+<ImgZoom src="/img/terraform_ip_elastico.png" title="Features image" alt="Features image"></ImgZoom>
 
 ### NAT Gateways
 
@@ -650,9 +642,7 @@ Atualize sua infraestrutura para verififcar as mudanças na AWS !
 
 Em `Dashboard > VPC > Gateways NAT` 
 
-<div align="center">
-<img src = "/img/terraform_nat_gateways.png" />
-</div>
+<ImgZoom src="/img/terraform_nat_gateways.png" title="Features image" alt="Features image"></ImgZoom>
 
 ### Route Tables
 
@@ -772,9 +762,7 @@ Atualize sua infraestrutura para verififcar as mudanças na AWS !
 
 Em `Dashboard > VPC > Tabelas de rotas` 
 
-<div align="center">
-<img src = "/img/terraform_route_table.png" />
-</div>
+<ImgZoom src="/img/terraform_route_table.png" title="Features image" alt="Features image"></ImgZoom>
 
 ###  Elastic Kubernetes Service
 <br>
@@ -1034,9 +1022,7 @@ Atualize sua infraestrutura para verififcar as mudanças na AWS !
 
 Em `Dashboard > EKS >  Cluster > cluster_name` 
 
-<div align="center">
-<img src = "/img/terraform_eks.png" />
-</div>
+<ImgZoom src="/img/terraform_eks.png" title="Features image" alt="Features image"></ImgZoom>
 
 <br>
 
@@ -1075,9 +1061,7 @@ Caso queira entender melhor sobre o arquivo kubeconfig , acesse [aqui](https://d
 
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/kubeconfig.jpeg" />
-</div>
+<ImgZoom src="/img/kubeconfig.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 <br>
 
@@ -1090,9 +1074,7 @@ kubectl get svc
 
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/kubectl_get_svc.jpeg" />
-</div>
+<ImgZoom src="/img/kubectl_get_svc.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 ## Subindo uma aplicação!
 
@@ -1195,9 +1177,7 @@ kubectl apply -f <caminho_para_arquivo_service>
 
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/deploy_app.jpeg" />
-</div>
+<ImgZoom src="/img/deploy_app.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 Verficando o status da aplicação que subimos:
 
@@ -1207,19 +1187,14 @@ kubectl get pods
 
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/get_pods.jpeg" />
-</div>
-
+<ImgZoom src="/img/get_pods.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 ```bash
 kubectl get nodes
 ```
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/get_nodes.jpeg" />
-</div>
+<ImgZoom src="/img/get_nodes.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 ```bash
 kubectl get svc
@@ -1227,9 +1202,7 @@ kubectl get svc
 
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/get_svc.jpeg" />
-</div>
+<ImgZoom src="/img/get_svc.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 #### Acessando a nossa aplicação
 
@@ -1240,9 +1213,7 @@ http://<EXTERNAL IP>
 ```
 Resultado esperado:
 
-<div align="center">
-<img src = "/img/acessando_nginx.jpeg" />
-</div>
+<ImgZoom src="/img/acessando_nginx.jpeg" title="Features image" alt="Features image"></ImgZoom>
 
 ## Limpando ambiente
 
@@ -1253,10 +1224,7 @@ Assim , antes de aplicarmos o comando para limpar o ambiente (**terraform destro
 
 Em `Painel EC2 > Balanceamento de carga > Load balancers`:
 
-<div align="center">
-<img src = "/img/deleta_load_balancers.png" />
-</div>
-
+<ImgZoom src="/img/deleta_load_balancers.png" title="Features image" alt="Features image"></ImgZoom>
 
 Após isso podemos realizar a limpeza via terraform:
 

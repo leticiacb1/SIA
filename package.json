@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/leticiacb1/SIA/issues"
   },
-  "homepage": "https://github.com/leticiacb1/SIA#readme"
+  "homepage": "https://github.com/leticiacb1/SIA#readme",
+  "dependencies": {
+    "medium-zoom": "^1.0.8"
+  }
 }

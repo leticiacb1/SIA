@@ -15,7 +15,9 @@ Objetiva-se portanto o escalonamento automático de instâncias , a depender da 
 
 ### Diagrama Arquitetura
 
-<img src="/img/diagrama.png" alt="Diagrama da Arquitetura" caption="Imagem"/>
+<ImgZoom src="/img/diagrama.png" title="Features image" alt="Features image">
+    <div class="image-center">Diagrama da Arquitetura do Projeto</div>
+</ImgZoom>
 
 ### Conceitos básicos - Serviços AWS
 <br>
