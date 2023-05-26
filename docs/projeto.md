@@ -1254,7 +1254,7 @@ Assim , antes de aplicarmos o comando para limpar o ambiente (**terraform destro
 Em `Painel EC2 > Balanceamento de carga > Load balancers`:
 
 <div align="center">
-<img src = "/img/deleta_load_balancers.jpeg" />
+<img src = "/img/deleta_load_balancers.png" />
 </div>
 
 
